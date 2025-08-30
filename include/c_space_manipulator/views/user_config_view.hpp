@@ -1,4 +1,5 @@
 #include <QWidget>
+#include "c_space_manipulator/views/link_config_view.hpp"
 
 namespace cspace_manipulator
 {
