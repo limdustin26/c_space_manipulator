@@ -1,0 +1,13 @@
+build/
+*.o
+*.obj
+*.moc
+*.moc.cpp
+*.ui.h
+CMakeFiles/
+CMakeCache.txt
+Makefile
+*.user
+*.pro.user
+*.qrc.cpp
+.vscode/
