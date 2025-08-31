@@ -1,4 +1,4 @@
-#ifndef CSPACE_MANIPULATOR_USER_CONFIG_VIEW_HPP 
+#ifndef CSPACE_MANIPULATOR_USER_CONFIG_VIEW_HPP
 #define CSPACE_MANIPULATOR_USER_CONFIG_VIEW_HPP
 
 #include <QWidget>
@@ -7,7 +7,9 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QMessageBox>
+
 #include "c_space_manipulator/views/link_config_view.hpp"
+#include "c_space_manipulator/controllers/manipulator_controller.hpp"
 
 namespace cspace_manipulator
 {
@@ -19,13 +21,17 @@ class UserConfigView : public QWidget
     ~UserConfigView()=default;
 
     private:
-    std::vector<LinkConfigView*> link_config_list_;
+    std::vector<LinkConfigView*> link_configs_;
     QVBoxLayout* links_layout_;
     int max_link_num_ = 10;
+
+    signals:
+    void cspaceTabRequested();
 
     private slots:
     void addLinkConfig();
     void removeLinkConfig();
+    void createManipulatorModel();
 
 };
 }

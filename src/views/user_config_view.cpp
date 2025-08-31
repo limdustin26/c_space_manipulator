@@ -23,6 +23,10 @@ UserConfigView::UserConfigView(QWidget* parent) : QWidget(parent)
     connect(add_button, &QPushButton::clicked, this, &UserConfigView::addLinkConfig);
     connect(remove_button, &QPushButton::clicked, this, &UserConfigView::removeLinkConfig);
 
+    // Create Button
+    QPushButton* create_button = new QPushButton(tr("Create"), this);
+    connect(create_button, &QPushButton::clicked, this, &UserConfigView::createManipulatorModel);
+
     // Button Layout
     QHBoxLayout* button_layout = new QHBoxLayout();
     button_layout->addWidget(add_button);
@@ -46,7 +50,7 @@ UserConfigView::UserConfigView(QWidget* parent) : QWidget(parent)
 void UserConfigView::addLinkConfig()
 {
     // Invalid if max number of link is reached
-    if(link_config_list_.size() >= max_link_num_)
+    if(link_configs_.size() >= max_link_num_)
     {
         // Warn Message Pop Up
         QMessageBox::warning(
@@ -58,9 +62,9 @@ void UserConfigView::addLinkConfig()
     }
 
     // Create new link
-    int new_index = link_config_list_.size() + 1;
+    int new_index = link_configs_.size() + 1;
     LinkConfigView* new_link = new LinkConfigView(new_index, this);
-    link_config_list_.push_back(new_link);
+    link_configs_.push_back(new_link);
 
     // Add to layout
     links_layout_->addWidget(new_link);
@@ -69,7 +73,7 @@ void UserConfigView::addLinkConfig()
 
 void UserConfigView::removeLinkConfig()
 {
-    if(link_config_list_.size() == 0)
+    if(link_configs_.size() == 0)
     {
         // Warn Message Pop Up
         QMessageBox::warning(
@@ -81,13 +85,23 @@ void UserConfigView::removeLinkConfig()
     }
 
     // Remove link from layout
-    LinkConfigView* last_link = link_config_list_.back();
+    LinkConfigView* last_link = link_configs_.back();
     links_layout_->removeWidget(last_link);
 
     // Remove link from memory
     last_link->deleteLater();
-    link_config_list_.pop_back();
+    link_configs_.pop_back();
 
+}
+
+void UserConfigView::createManipulatorModel()
+{
+    // create model
+    manipulator_controller_->setLinks(link_configs_);
+    manipulator_controller_->createManipulator(manipulator_model_);
+
+    // emit signal to switch tab to C-space in Main Window
+    emit cspaceTabRequested();
 }
 
 } // end of namespace

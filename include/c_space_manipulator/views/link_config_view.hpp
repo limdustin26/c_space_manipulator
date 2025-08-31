@@ -1,4 +1,4 @@
-#ifndef CSPACE_MANIPULATOR_LINK_CONFIG_VIEW_HPP 
+#ifndef CSPACE_MANIPULATOR_LINK_CONFIG_VIEW_HPP
 #define CSPACE_MANIPULATOR_LINK_CONFIG_VIEW_HPP
 
 #include <QWidget>
@@ -19,7 +19,7 @@ class LinkConfigView : public QWidget
     LinkConfigView(int link_num, QWidget *parent = nullptr);
     ~LinkConfigView()=default;
 
-    linkModel getModel() const;
+    linkConfig getConfig();
 
     private:
     QComboBox* joint_drop_down_;

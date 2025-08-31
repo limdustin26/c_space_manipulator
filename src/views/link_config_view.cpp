@@ -88,26 +88,30 @@ LinkConfigView::LinkConfigView(int link_num,QWidget *parent): QWidget(parent)
 
 }
 
-linkModel LinkConfigView::getModel() const
+linkConfig LinkConfigView::getConfig()
 {
-    linkModel model;
-    model.joint_type = joint_drop_down_->currentText();
-    model.link_length = link_length_edit_->text().toDouble();
-    model.initial_orientation = initial_orientation_edit_->text().toDouble();
+    linkConfig config;
+    config.joint_type = joint_drop_down_->currentText().toStdString();
+    config.link_length = link_length_edit_->text().toDouble();
+    config.initial_orientation = initial_orientation_edit_->text().toDouble();
 
-    if(model.joint_type == tr("revolute"))
+    if(config.joint_type == "revolute")
     {
         model.max_degree = max_degree_edit_->text().toDouble();
         model.min_degree = min_degree_edit_->text().toDouble();
         model.max_extension = 0.0;
     }
 
-    else if (model.joint_type == tr("prismatic"))
+    else if (model.joint_type == "prismatic")
     {
         model.max_extension = max_extension_edit_->text().toDouble();
         model.min_degree = 0.0;
         model.max_degree = 0.0;
     }
-    return model;
+
+    return config;
+
 }
+
+
 } // end of namespace
