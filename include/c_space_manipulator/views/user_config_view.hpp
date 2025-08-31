@@ -1,3 +1,6 @@
+#ifndef CSPACE_MANIPULATOR_USER_CONFIG_VIEW_HPP 
+#define CSPACE_MANIPULATOR_USER_CONFIG_VIEW_HPP
+
 #include <QWidget>
 #include <QPushButton>
 #include <QScrollArea>
@@ -27,3 +30,5 @@ class UserConfigView : public QWidget
 
 };
 }
+
+#endif

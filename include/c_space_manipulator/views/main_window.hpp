@@ -1,10 +1,12 @@
+#ifndef CSPACE_MANIPULATOR_MAIN_WINDOW_HPP 
+#define CSPACE_MANIPULATOR_MAIN_WINDOW_HPP
+
 #include <QWidget>
 #include <QTabWidget>
 
 
 namespace cspace_manipulator
 {
-
     class MainWindow : public QWidget
     {
         Q_OBJECT
@@ -12,17 +14,7 @@ namespace cspace_manipulator
         MainWindow();
         ~MainWindow()=default;
 
-        private:
-        RobotManipulatorModel* robot_manipulator_widget_;
-        QTabWidget* tabs_;
-
     };
+} // end of namespace
 
-    class RobotManipulatorWidget : public QWidget
-    {
-        Q_OBJECT
-        public:
-        RobotManipulatorWidget(QWidget* parent=nullptr);
-        ~RobotManipulatorWidget()=default;
-    };
-}
+#endif

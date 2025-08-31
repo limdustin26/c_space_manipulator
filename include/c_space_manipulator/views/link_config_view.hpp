@@ -1,3 +1,6 @@
+#ifndef CSPACE_MANIPULATOR_LINK_CONFIG_VIEW_HPP 
+#define CSPACE_MANIPULATOR_LINK_CONFIG_VIEW_HPP
+
 #include <QWidget>
 #include <QLabel>
 #include <QString>
@@ -26,3 +29,5 @@ class LinkConfigView : public QWidget
     QLineEdit* max_extension_edit_ ;
 };
 }
+
+#endif

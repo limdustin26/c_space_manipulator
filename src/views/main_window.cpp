@@ -1,32 +1,35 @@
 #include "c_space_manipulator/views/main_window.hpp"
 
-cspace_manipulator::MainWindow()
+namespace cspace_manipulator
 {
-
-    tabs_ = new QTabWidget(this);
+MainWindow::MainWindow()
+{
+    // Create Tab
+    tabs = new QTabWidget(this);
 
     // Add User Config and C-Space Tab
-    tabs_->addTab(new UserConfigView(), QObject::tr("User Configuration"));
-    tabs_->addTab(new MainAppView(), QObject::tr("C-Space"));
+    tabs->addTab(new UserConfigView(), QObject::tr("User Configuration"));
+    tabs->addTab(new MainAppView(), QObject::tr("C-Space"));
 
-    
-    
-    
-    // Max 6 DoF
-    // Default 2 DoF revolute
+    // Update Button
+    QPushButton* update_button = new QPushButton(tr("Update"), this);
+    // connect(push_button, &QPushButton::clicked, this, &UserConfigView::updateManipulatorModel);
 
-    // Create 2D RobotManipulator Widget with user config
-    robot_manipulator_widget_ = new RobotManipulatorWidget(this, user_config);
+    // Main Layout
+    QVBoxLayout* main_layout = new QVBoxLayout();
+    main_layout->addWidget(tabs);
 
-    // Create C-Space Widget
-    c_space_widget_ = new CSpaceWidget(this);
+    // Spacer to push update button to bottom
+    main_layout->addStretch();
 
-    // Create Obstacle Widget
-    obstacle_widget_ = new ObstacleWidget(this)
+    // Horizontal layout for bottom-right alignment
+    QHBoxLayout* button_layout = new QHBoxLayout();
+    button_layout->addStretch();             // Push button to right
+    button_layout->addWidget(update_button); // Add button
+    main_layout->addLayout(button_layout);   // Add HBoxLayout to VBoxLayout
 
-    // Put to Layout
-
-    
-    
+    // Set main layout
+    setLayout(main_layout);
 
 }
+} // end of namespace
