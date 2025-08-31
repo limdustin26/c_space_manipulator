@@ -6,6 +6,7 @@
 #include <QString>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QGridLayout>
 #include "c_space_manipulator/models/link_config_model.hpp"
 
 
@@ -18,7 +19,7 @@ class LinkConfigView : public QWidget
     LinkConfigView(int link_num, QWidget *parent = nullptr);
     ~LinkConfigView()=default;
 
-    LinkConfigModel getModel() const;
+    linkModel getModel() const;
 
     private:
     QComboBox* joint_drop_down_;

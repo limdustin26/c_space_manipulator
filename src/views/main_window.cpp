@@ -5,11 +5,11 @@ namespace cspace_manipulator
 MainWindow::MainWindow()
 {
     // Create Tab
-    tabs = new QTabWidget(this);
+    QTabWidget* tabs = new QTabWidget(this);
 
     // Add User Config and C-Space Tab
     tabs->addTab(new UserConfigView(), QObject::tr("User Configuration"));
-    tabs->addTab(new MainAppView(), QObject::tr("C-Space"));
+    // tabs->addTab(new AppView(), QObject::tr("C-Space"));
 
     // Update Button
     QPushButton* update_button = new QPushButton(tr("Update"), this);
@@ -18,9 +18,6 @@ MainWindow::MainWindow()
     // Main Layout
     QVBoxLayout* main_layout = new QVBoxLayout();
     main_layout->addWidget(tabs);
-
-    // Spacer to push update button to bottom
-    main_layout->addStretch();
 
     // Horizontal layout for bottom-right alignment
     QHBoxLayout* button_layout = new QHBoxLayout();

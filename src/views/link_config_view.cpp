@@ -18,8 +18,8 @@ LinkConfigView::LinkConfigView(int link_num,QWidget *parent): QWidget(parent)
 
     // Joint Drop Down
     QComboBox* joint_drop_down_ = new QComboBox(this);
-    joint_drop_down->addItem(tr("revolute"));   // default option
-    joint_drop_down->addItem(tr("prismatic"));
+    joint_drop_down_->addItem(tr("revolute"));   // default option
+    joint_drop_down_->addItem(tr("prismatic"));
 
     // Line Edits
     QLineEdit* link_length_edit_ = new QLineEdit(this);
@@ -60,7 +60,7 @@ LinkConfigView::LinkConfigView(int link_num,QWidget *parent): QWidget(parent)
     max_extension_edit_->hide();
 
     // Event on joint drop down selection
-    connect(joint_drop_down, &QComboBox::currentTextChanged, this, [=](const QString &text)
+    connect(joint_drop_down_, &QComboBox::currentTextChanged, this, [=](const QString &text)
     {
         if(text == tr("revolute"))
         {
@@ -68,12 +68,18 @@ LinkConfigView::LinkConfigView(int link_num,QWidget *parent): QWidget(parent)
             min_degree_edit_->show();
             max_degree_label->show();
             max_degree_edit_->show();
+            max_extension_label->hide();
+            max_extension_edit_->hide();
         }
 
         else if(text == tr("prismatic"))
         {
             max_extension_label->show();
             max_extension_edit_->show();
+            min_degree_label->hide();
+            min_degree_edit_->hide();
+            max_degree_label->hide();
+            max_degree_edit_->hide();
         }
     }
     );
@@ -82,21 +88,21 @@ LinkConfigView::LinkConfigView(int link_num,QWidget *parent): QWidget(parent)
 
 }
 
-LinkConfigModel LinkConfigView::getModel()
+linkModel LinkConfigView::getModel() const
 {
-    LinkConfigModel model;
+    linkModel model;
     model.joint_type = joint_drop_down_->currentText();
     model.link_length = link_length_edit_->text().toDouble();
     model.initial_orientation = initial_orientation_edit_->text().toDouble();
 
-    if(data.joint_type == tr("revolute"))
+    if(model.joint_type == tr("revolute"))
     {
         model.max_degree = max_degree_edit_->text().toDouble();
         model.min_degree = min_degree_edit_->text().toDouble();
         model.max_extension = 0.0;
     }
 
-    else if (data.joint_type == tr("prismatic"))
+    else if (model.joint_type == tr("prismatic"))
     {
         model.max_extension = max_extension_edit_->text().toDouble();
         model.min_degree = 0.0;

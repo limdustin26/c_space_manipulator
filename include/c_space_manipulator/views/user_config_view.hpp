@@ -16,17 +16,16 @@ class UserConfigView : public QWidget
     Q_OBJECT
     public:
     UserConfigView(QWidget *parent = nullptr);
-    ~UserConfigView();
+    ~UserConfigView()=default;
 
     private:
     std::vector<LinkConfigView*> link_config_list_;
-    QVBoxLayout* links_layout_
+    QVBoxLayout* links_layout_;
     int max_link_num_ = 10;
 
     private slots:
     void addLinkConfig();
     void removeLinkConfig();
-    void updateManipulatorModel();
 
 };
 }
