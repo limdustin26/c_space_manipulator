@@ -27,7 +27,7 @@ struct linkModel
 
 struct manipulatorModel
 {
-
+    std::vector<linkModel> links;
 
 };
 
