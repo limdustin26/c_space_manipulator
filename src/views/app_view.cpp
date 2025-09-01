@@ -2,18 +2,27 @@
 
 namespace cspace_manipulator
 {
-AppView::AppView(QWidget* parent): QWidget(parent) 
+AppView::AppView(QWidget* parent): QWidget(parent)
 {
     // Widgets
-    WorkspaceView* ws_view = new WorkspaceView(,this);
-    CSpaceView* cspace_view = new CSpaceView();
+    ws_view_ = new WorkspaceView(this);
+    // cspace_view_ = new CSpaceView(this);
+
+    ws_view_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // App Layout
-    QHBoxLayout* app_layout = QHBoxLayout(this);
-    app_layout->addWidget(ws_view);
-    app_layout->addWidget(cspace_view);
+    QHBoxLayout* app_layout = new QHBoxLayout(this);
+    app_layout->addWidget(ws_view_);
+    // app_layout->addWidget(cspace_view);
 
     setLayout(app_layout);
+}
+
+void AppView::parseManipulatorModel(const manipulatorModel &model)
+{
+    // set manipulator in ws_view
+    ws_view_->setManipulatorModel(model);
+
 }
 
 }

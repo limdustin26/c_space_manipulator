@@ -17,21 +17,21 @@ LinkConfigView::LinkConfigView(int link_num,QWidget *parent): QWidget(parent)
     QLabel* max_extension_label = new QLabel(tr("Max Extension"), this);
 
     // Joint Drop Down
-    QComboBox* joint_drop_down_ = new QComboBox(this);
+    joint_drop_down_ = new QComboBox(this);
     joint_drop_down_->addItem(tr("revolute"));   // default option
     joint_drop_down_->addItem(tr("prismatic"));
 
     // Line Edits
-    QLineEdit* link_length_edit_ = new QLineEdit(this);
+    link_length_edit_ = new QLineEdit(this);
     link_length_edit_->setValidator(new QDoubleValidator(0.0, 6.0, 2, this));
     link_length_edit_->setPlaceholderText(tr("max = 6"));
 
-    QLineEdit* initial_orientation_edit_ = new QLineEdit(this);
+    initial_orientation_edit_ = new QLineEdit(this);
 
-    QLineEdit* min_degree_edit_ = new QLineEdit(this);
-    QLineEdit* max_degree_edit_ = new QLineEdit(this);
+    min_degree_edit_ = new QLineEdit(this);
+    max_degree_edit_ = new QLineEdit(this);
 
-    QLineEdit* max_extension_edit_ = new QLineEdit(this);
+    max_extension_edit_ = new QLineEdit(this);
 
     // Layout
     QGridLayout* grid = new QGridLayout(this);
@@ -51,11 +51,11 @@ LinkConfigView::LinkConfigView(int link_num,QWidget *parent): QWidget(parent)
     grid->addWidget(max_extension_label, 2,2);
     grid->addWidget(max_extension_edit_, 2,3);
 
-    // Initially hide joint-specific labels
-    min_degree_label->hide();
-    min_degree_edit_->hide();
-    max_degree_label->hide();
-    max_degree_edit_->hide();
+    // Initially hide prismatic labels
+    min_degree_label->show();
+    min_degree_edit_->show();
+    max_degree_label->show();
+    max_degree_edit_->show();
     max_extension_label->hide();
     max_extension_edit_->hide();
 
@@ -97,16 +97,16 @@ linkConfig LinkConfigView::getConfig()
 
     if(config.joint_type == "revolute")
     {
-        model.max_degree = max_degree_edit_->text().toDouble();
-        model.min_degree = min_degree_edit_->text().toDouble();
-        model.max_extension = 0.0;
+        config.max_degree = max_degree_edit_->text().toDouble();
+        config.min_degree = min_degree_edit_->text().toDouble();
+        config.max_extension = 0.0;
     }
 
-    else if (model.joint_type == "prismatic")
+    else if (config.joint_type == "prismatic")
     {
-        model.max_extension = max_extension_edit_->text().toDouble();
-        model.min_degree = 0.0;
-        model.max_degree = 0.0;
+        config.max_extension = max_extension_edit_->text().toDouble();
+        config.min_degree = 0.0;
+        config.max_degree = 0.0;
     }
 
     return config;

@@ -2,6 +2,8 @@
 #define CSPACE_MANIPULATOR_WORKSPACE_VIEW_HPP
 
 #include <QWidget>
+#include <QPainter>
+#include "c_space_manipulator/models/models.hpp"
 
 namespace cspace_manipulator
 {
@@ -9,9 +11,13 @@ namespace cspace_manipulator
     {
         Q_OBJECT
         public:
-        WorkspaceView(manipulatorModel* model, QWidget* parent=nullptr);
+        WorkspaceView(QWidget* parent=nullptr);
+        void setManipulatorModel(const manipulatorModel &model);
+        void paintEvent(QPaintEvent*);
+
+        private:
+        manipulatorModel manipulator_model_;
     };
 }
 
 #endif
-

@@ -13,7 +13,7 @@ struct linkConfig
     double min_degree;
     double max_degree;
     double max_extension;
-}
+};
 
 
 struct linkModel

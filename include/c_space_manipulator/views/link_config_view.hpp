@@ -7,7 +7,7 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QGridLayout>
-#include "c_space_manipulator/models/link_config_model.hpp"
+#include "c_space_manipulator/models/models.hpp"
 
 
 namespace cspace_manipulator

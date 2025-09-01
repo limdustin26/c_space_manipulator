@@ -1,10 +1,11 @@
-#ifndef CSPACE_MANIPULATOR_MAIN_WINDOW_HPP 
+#ifndef CSPACE_MANIPULATOR_MAIN_WINDOW_HPP
 #define CSPACE_MANIPULATOR_MAIN_WINDOW_HPP
 
 #include <QWidget>
 #include <QMainWindow>
 #include <QTabWidget>
 #include "c_space_manipulator/views/user_config_view.hpp"
+#include "c_space_manipulator/views/app_view.hpp"
 
 namespace cspace_manipulator
 {
