@@ -23,7 +23,7 @@ namespace cspace_manipulator
                                               link.start_pt.y() + link.config.link_length * sin(link.orientation));
                 link.extension = 0.0;
                 start_pt = link.end_pt;
-                new_model.links.emplace_back();
+                new_model.links.emplace_back(link);
             }
 
             model = new_model;
