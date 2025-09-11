@@ -10,9 +10,6 @@ UserConfigView::UserConfigView(QWidget* parent) : QWidget(parent)
     scroll_area->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // Scroll Content
-    // QWidget* scroll_content = new QWidget();
-    // scroll_content->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    // QVBoxLayout* scroll_layout = new QVBoxLayout(scroll_content);
     scroll_content_ = new QWidget();
     scroll_content_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QVBoxLayout* scroll_layout = new QVBoxLayout(scroll_content_);
@@ -38,8 +35,6 @@ UserConfigView::UserConfigView(QWidget* parent) : QWidget(parent)
     button_layout->addWidget(remove_button);
     scroll_layout->addLayout(button_layout);
 
-    // scroll_content->setLayout(scroll_layout);
-    // scroll_area->setWidget(scroll_content);
     scroll_content_->setLayout(scroll_layout);
     scroll_area->setWidget(scroll_content_);
 
