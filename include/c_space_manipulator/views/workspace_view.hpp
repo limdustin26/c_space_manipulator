@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QPainter>
 #include "c_space_manipulator/models/models.hpp"
+#include <cmath>
+#include <QMouseEvent>
+
 
 namespace cspace_manipulator
 {
@@ -18,6 +21,13 @@ namespace cspace_manipulator
         private:
         manipulatorModel manipulator_model_;
         double resolution_{0.02} ; // meter/pixel
+        int selected_joint_ = -1;  // index of the joint being dragged
+        QPointF drag_start_pos_;
+
+        protected:
+        void mousePressEvent(QMouseEvent* event) override;
+        void mouseMoveEvent(QMouseEvent* event) override;
+        void mouseReleaseEvent(QMouseEvent* event) override;
     };
 }
 
