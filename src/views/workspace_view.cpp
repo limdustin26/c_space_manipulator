@@ -37,27 +37,30 @@ namespace cspace_manipulator
             painter.setBrush(Qt::blue);
             painter.drawEllipse(start, 6, 6);
 
-            painter.setBrush(Qt::red);
-            painter.drawEllipse(end, 6, 6);
+            if ((i + 1) == manipulator_model_.links.size())
+            {
+                painter.setBrush(Qt::red);
+                painter.drawEllipse(end, 6, 6);
+            }
+
         }
     }
 
     void WorkspaceView::mousePressEvent(QMouseEvent* event)
     {
-        QPointF click_pos = event->pos();
-        QPointF origin(width() / 2.0, height() / 2.0);
+        // convert click to workspace coordinates
+        Eigen::Vector2d origin(width()/2.0, height()/2.0);
+        Eigen::Vector2d mouse_ws((event->pos().x() - origin.x()) * resolution_,
+                                (origin.y() - event->pos().y()) * resolution_);
 
-        // loop over all joints
         for (size_t i = 0; i < manipulator_model_.links.size(); ++i)
         {
             const auto& link = manipulator_model_.links[i];
-            QPointF joint_pos(origin.x() + (link.start_pt.x() / resolution_),
-                            origin.y() - (link.start_pt.y() / resolution_));
-
-            if (QLineF(click_pos, joint_pos).length() < 10) // clicked near joint
+            Eigen::Vector2d joint_ws = link.end_pt;
+            if ((mouse_ws - joint_ws).norm() < 5 * resolution_) // threshold in workspace units
             {
                 selected_joint_ = i;
-                drag_start_pos_ = click_pos;
+                drag_start_offset_ = joint_ws - mouse_ws; // store offset
                 break;
             }
         }
@@ -67,43 +70,62 @@ namespace cspace_manipulator
     {
         if (selected_joint_ < 0) return;
 
-        const auto& link = manipulator_model_.links[selected_joint_];
+        auto& link = manipulator_model_.links[selected_joint_];
 
-        QPointF origin(width() / 2.0, height() / 2.0);
-        QPointF joint_pos(origin.x() + (link.start_pt.x() / resolution_),
-                        origin.y() - (link.start_pt.y() / resolution_));
+        // Convert mouse position to workspace (meters)
+        Eigen::Vector2d origin(width() / 2.0, height() / 2.0); // in pixels
+        Eigen::Vector2d mouse_ws(
+            (event->pos().x() - origin.x()) * resolution_,      // X in meters
+            (origin.y() - event->pos().y()) * resolution_       // Y in meters (flip)
+        );
 
-        QPointF mouse_pos = event->pos();
-        QPointF delta = mouse_pos - joint_pos;
+        // Optional: account for initial drag offset to avoid snapping
+        Eigen::Vector2d target_pos = mouse_ws + drag_start_offset_;
 
         if (link.config.joint_type == "revolute")
         {
-            // angle relative to previous link or x-axis
-            double angle = std::atan2(-delta.y(), delta.x()); // note Y flipped
-            // clamp to min/max angle
-            angle = std::max(link.config.min_degree * M_PI/180.0, std::min(link.config.max_degree * M_PI/180.0, angle));
-            manipulator_model_.links[selected_joint_].orientation = angle * 180.0/M_PI;
+            // vector from joint start to target
+            Eigen::Vector2d delta = target_pos - link.start_pt;
 
-            // recompute end point based on length and new angle
+            double angle = std::atan2(delta.y(), delta.x()); // angle in radians
+            // clamp to min/max angles
+            double min_rad = link.config.min_degree * M_PI / 180.0;
+            double max_rad = link.config.max_degree * M_PI / 180.0;
+            angle = std::max(min_rad, std::min(max_rad, angle));
+
+            // store orientation in degrees if needed
+            link.orientation = angle * 180.0 / M_PI;
+
+            // recompute end point based on length
             double l = link.config.link_length;
-            manipulator_model_.links[selected_joint_].end_pt = link.start_pt + Eigen::Vector2d(l * cos(angle), l * sin(angle));
+            link.end_pt = link.start_pt + Eigen::Vector2d(l * std::cos(angle), l * std::sin(angle));
         }
         else if (link.config.joint_type == "prismatic")
         {
-            // project mouse delta onto link axis
+            // vector along current link
             Eigen::Vector2d axis = link.end_pt - link.start_pt;
-            double axis_len = std::sqrt(axis.x()*axis.x() + axis.y()*axis.y());
+            double axis_len = axis.norm(); if (axis_len < 1e-6) axis_len = 1e-6;
+            // avoid divide by zero
             Eigen::Vector2d axis_unit = axis / axis_len;
 
-            double proj = (delta.x() * axis_unit.x() + delta.y() * axis_unit.y()) * resolution_;
+            // project mouse delta onto link axis
+            Eigen::Vector2d delta = target_pos - link.start_pt;
+            double proj = delta.dot(axis_unit); // meters
             // clamp extension
             proj = std::max(0.0, std::min(link.config.max_extension, proj));
 
-            manipulator_model_.links[selected_joint_].end_pt = link.start_pt + axis_unit * proj;
+            // update end point
+             double l = link.config.link_length;
+            link.end_pt = link.start_pt + axis_unit * (proj+l);
         }
+
+        // update next link start point if exists
+        if (selected_joint_ + 1 < manipulator_model_.links.size())
+            manipulator_model_.links[selected_joint_ + 1].start_pt = link.end_pt;
 
         update(); // repaint
     }
+
 
     void WorkspaceView::mouseReleaseEvent(QMouseEvent*)
     {

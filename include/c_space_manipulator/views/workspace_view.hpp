@@ -22,7 +22,7 @@ namespace cspace_manipulator
         manipulatorModel manipulator_model_;
         double resolution_{0.02} ; // meter/pixel
         int selected_joint_ = -1;  // index of the joint being dragged
-        QPointF drag_start_pos_;
+        Eigen::Vector2d  drag_start_offset_;
 
         protected:
         void mousePressEvent(QMouseEvent* event) override;
