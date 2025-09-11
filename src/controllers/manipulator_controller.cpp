@@ -17,7 +17,7 @@ namespace cspace_manipulator
             {
                 linkModel link;
                 link.config = link_config;
-                link.orientation = link.config.initial_orientation; // convert to rad maybe
+                link.orientation = link.config.initial_orientation * M_PI/180.0; // degrees to radian
                 link.start_pt = start_pt;
                 link.end_pt = Eigen::Vector2d(link.start_pt.x() + link.config.link_length * cos(link.orientation),
                                               link.start_pt.y() + link.config.link_length * sin(link.orientation));

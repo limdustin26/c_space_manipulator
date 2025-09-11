@@ -2,6 +2,7 @@
 #define CSPACE_MANIPULATOR_MANIPULATOR_CONTROLLER_HPP
 
 #include "c_space_manipulator/models/models.hpp"
+#include <cmath>
 
 namespace cspace_manipulator
 {

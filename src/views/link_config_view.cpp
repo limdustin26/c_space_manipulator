@@ -24,14 +24,18 @@ LinkConfigView::LinkConfigView(int link_num,QWidget *parent): QWidget(parent)
     // Line Edits
     link_length_edit_ = new QLineEdit(this);
     link_length_edit_->setValidator(new QDoubleValidator(0.0, 6.0, 2, this));
-    link_length_edit_->setPlaceholderText(tr("max = 6"));
+    link_length_edit_->setPlaceholderText(tr("max = 6.00"));
 
     initial_orientation_edit_ = new QLineEdit(this);
+    initial_orientation_edit_->setPlaceholderText(tr("-180.0 to 180.0"));
 
     min_degree_edit_ = new QLineEdit(this);
+    min_degree_edit_->setPlaceholderText(tr("-180.0 to 180.0"));
     max_degree_edit_ = new QLineEdit(this);
+    max_degree_edit_->setPlaceholderText(tr("-180.0 to 180.0"));
 
     max_extension_edit_ = new QLineEdit(this);
+    max_extension_edit_->setPlaceholderText(tr("max = 3.0"));
 
     // Layout
     QGridLayout* grid = new QGridLayout(this);
@@ -92,19 +96,24 @@ linkConfig LinkConfigView::getConfig()
 {
     linkConfig config;
     config.joint_type = joint_drop_down_->currentText().toStdString();
-    config.link_length = link_length_edit_->text().toDouble();
-    config.initial_orientation = initial_orientation_edit_->text().toDouble();
+    config.link_length = std::clamp(0.0, 6.0, link_length_edit_->text().toDouble());
+    link_length_edit_->setText(QString::number(config.link_length, 'f', 2)); // update input text if exceed
+    config.initial_orientation = std::clamp(-180.0,180.0, initial_orientation_edit_->text().toDouble());
+    initial_orientation_edit_->setText(QString::number(config.initial_orientation, 'f', 2));
 
     if(config.joint_type == "revolute")
     {
-        config.max_degree = max_degree_edit_->text().toDouble();
-        config.min_degree = min_degree_edit_->text().toDouble();
+        config.max_degree = std::clamp(-180.0,180.0,max_degree_edit_->text().toDouble());
+        config.min_degree = std::clamp(-180.0,180.0,min_degree_edit_->text().toDouble());
+        max_degree_edit_->setText(QString::number(config.max_degree, 'f', 2)); // update input text if exceed
+        min_degree_edit_->setText(QString::number(config.min_degree, 'f', 2)); // update input text if exceed
         config.max_extension = 0.0;
     }
 
     else if (config.joint_type == "prismatic")
     {
-        config.max_extension = max_extension_edit_->text().toDouble();
+        config.max_extension = std::clamp(0.0,3.0,max_extension_edit_->text().toDouble());
+        max_extension_edit_->setText(QString::number(config.max_extension, 'f', 2)); // update input text if exceed
         config.min_degree = 0.0;
         config.max_degree = 0.0;
     }

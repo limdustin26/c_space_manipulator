@@ -24,10 +24,10 @@ namespace cspace_manipulator
         {
             const auto& link = manipulator_model_.links[i];
 
-            QPointF start(origin.x() + link.start_pt.x(),
-                          origin.y() - link.start_pt.y());
-            QPointF end(origin.x() + link.end_pt.x(),
-                        origin.y() - link.end_pt.y());
+            QPointF start(origin.x() + (link.start_pt.x() / resolution_),
+                          origin.y() - (link.start_pt.y() / resolution_));
+            QPointF end(origin.x() + (link.end_pt.x() / resolution_),
+                        origin.y() - (link.end_pt.y() / resolution_));
 
             // Draw link
             painter.setPen(QPen(Qt::black, 2));

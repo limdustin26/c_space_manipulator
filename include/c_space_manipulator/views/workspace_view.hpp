@@ -17,6 +17,7 @@ namespace cspace_manipulator
 
         private:
         manipulatorModel manipulator_model_;
+        double resolution_{0.02} ; // meter/pixel
     };
 }
 
